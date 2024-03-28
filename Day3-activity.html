@@ -7,6 +7,7 @@
     <title>Document</title>
     <style>
         body {
+            height: 100vh;
             background-color: #f0f0f0;
             display: flex;
             gap: 20px;
@@ -50,7 +51,13 @@
         }
 
         button:hover {
-            background-color:  rgba(0, 26, 255, 0.589);
+            background-color: rgba(0, 26, 255, 0.589);
+        }
+        footer {
+            justify-self: flex-end;
+            text-align: center;
+            margin-top: 20px;
+
         }
     </style>
 </head>
@@ -62,7 +69,7 @@
     <hr style="background-color: #000000; width: 50%;">
     <section id="main-sec">
         <p>Click the button to reveal the code</p>
-        <button class="button" type="button">Reveal</button>
+        <button class="button" id="rev-but" type="button">Reveal</button>
     </section>
 
     <section style="text-align: center;">
@@ -73,6 +80,7 @@
         </div>
 
         <h2 id="safe-status">The safe is LOCKED</h2>
+
     </section>
 
 </body>
@@ -81,59 +89,82 @@
         <p>&copy; 2024. All rights reserved.</p>
     </div>
 </footer>
-
 <script>
+
+    let unlockCode = [];
+    function generateCode() {
+        unlockCode = [];
+        for (let i = 0; i < 8; i++) {
+            unlockCode.push(Math.floor(Math.random() * 9) + 1);
+        }
+    }
+
+
     function releaseCode() {
-        let unlockCode = [4, 1];
+        generateCode();
+        document.getElementById("rev-but").disabled = true;
+        document.getElementById("rev-but").style.backgroundColor = "gray";
         let paragraph = document.getElementsByTagName("p")[0];
         let index = 0;
+        let digitNum = 1;
         unlockCode.forEach(function (num) {
             setTimeout(function () {
-                paragraph.innerText = num;
+                console.log(num);
+                paragraph.style.fontSize = "20px";
+                paragraph.style.fontWeight = "bold";
+                paragraph.innerText = `Digit ${digitNum}: →  ( ${num} )`;
+                digitNum++;
             }, index * 1000);
             index++;
         });
         setTimeout(function () {
             paragraph.innerText = "Good Luck";
+            console.log("Good Luck");
+        }, index * 1000);
+        index++;
+        setTimeout(function () {
             document.getElementById("safe-state").style.display = "flex";
             document.getElementById("main-sec").style.display = "none";
+        }, index * 1000)
 
-        }, index * 1000);
+
     }
 
     function resetCode() {
-    // Create a new button element
-    var button = document.createElement("button");
+        // Create a new button element
+        var button = document.createElement("button");
 
-    // Set button attributes
-    button.className = "button";
-    button.type = "button";
-    button.innerText = "Reset";
+        // Set button attributes
+        button.className = "button";
+        button.type = "button";
+        button.innerText = "Reset";
 
-    // Add event listener to the button
-    button.addEventListener("click", function () {
-        // Reset safe status
-        document.getElementById("safe-status").innerText = "The safe is LOCKED";
-        document.getElementById("safe-status").style.color = "black";
-        document.getElementsByTagName("p")[0].innerText = "Click the button to reveal the code";
-        document.getElementById("code").value = "";
-        document.getElementById("main-sec").style.display = "flex";
-        document.getElementById("safe-state").style.display = "none";
-        // Remove the reset button
-        button.parentNode.removeChild(button);
-    });
+        // Add event listener to the button
+        button.addEventListener("click", function () {
+            // Reset safe status
+            document.getElementById("safe-status").innerText = "The safe is LOCKED";
+            document.getElementById("safe-status").style.color = "black";
+            document.getElementsByTagName("p")[0].innerText = "Click the button to reveal the code";
+            document.getElementById("code").value = "";
+            document.getElementById("main-sec").style.display = "flex";
+            document.getElementById("safe-state").style.display = "none";
+            // Remove the reset button
+            button.parentNode.removeChild(button);
+            document.getElementById("rev-but").disabled = false;
+            document.getElementById("rev-but").style.backgroundColor = "blue";
+        });
 
-    // Append the button to the body
-    document.body.appendChild(button);
-}
+        // Append the button to the body
+        document.body.appendChild(button);
+    }
 
     function unlockSafe() {
-        let unlockCode = [4, 1];
 
         // getting the value of the input field
         let input = document.getElementById("code").value;
         let status = document.getElementById("safe-status");
-        if (input === unlockCode.join("")) {
+        unlockCode = unlockCode.join("");
+        if (input === unlockCode) {
             status.style.color = "green";
             status.innerText = "The safe is UNLOCKED";
             document.getElementById("main-sec").style.display = "none";
@@ -148,7 +179,7 @@
             resetCode();
         }
     }
-    
+
 
     document.getElementsByClassName("button")[0].addEventListener("click", releaseCode);
     document.getElementsByClassName("button")[1].addEventListener("click", unlockSafe);
