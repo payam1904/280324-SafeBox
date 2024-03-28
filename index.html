@@ -72,7 +72,7 @@
         <button class="button" id="rev-but" type="button">Reveal</button>
     </section>
 
-    <section style="text-align: center;">
+    <section id="status-sec" style="text-align: center;">
         <div id="safe-state">
             <input type="text" id="code" placeholder="Enter the code"
                 style="width: 40%; height: 35px; font-size: 18px; align-self: center; border-radius: 5px; border: 1px solid gray;">
@@ -86,7 +86,7 @@
 </body>
 <footer>
     <div id="footer">
-        <p>&copy; 2024. All rights reserved.</p>
+        <p>&copy; © 2024 Payam Gh. All rights reserved..</p>
     </div>
 </footer>
 <script>
@@ -94,7 +94,7 @@
     let unlockCode = [];
     function generateCode() {
         unlockCode = [];
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 1; i++) {
             unlockCode.push(Math.floor(Math.random() * 9) + 1);
         }
     }
@@ -135,9 +135,10 @@
         var button = document.createElement("button");
 
         // Set button attributes
-        button.className = "button";
+        button.className = "button reset-button";
         button.type = "button";
         button.innerText = "Reset";
+        document.getElementById("status-sec").appendChild(button);
 
         // Add event listener to the button
         button.addEventListener("click", function () {
@@ -149,14 +150,13 @@
             document.getElementById("main-sec").style.display = "flex";
             document.getElementById("safe-state").style.display = "none";
             // Remove the reset button
-            button.parentNode.removeChild(button);
             document.getElementById("rev-but").disabled = false;
             document.getElementById("rev-but").style.backgroundColor = "blue";
-        });
+            document.getElementById("status-sec").removeChild(button);
 
-        // Append the button to the body
-        document.body.appendChild(button);
-    }
+
+        });
+    }    
 
     function unlockSafe() {
 
